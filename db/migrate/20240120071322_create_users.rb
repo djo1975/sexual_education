@@ -8,7 +8,6 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.integer "age"
       t.string "country"
       t.string "occupation"
-      t.string "email", default: "", null: false
 
       t.timestamps
     end
