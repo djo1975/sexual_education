@@ -1,10 +1,15 @@
-# app/controllers/confirmations_controller.rb
+# confirmations_controller.rb
 class ConfirmationsController < Devise::ConfirmationsController
-    # private
-  
-    # def after_confirmation_path_for(resource_name, resource)
-    #   sign_in(resource) # Ovo će automatski prijaviti korisnika nakon potvrde e-pošte
-    #   root_path # Ili postavi na neku drugu putanju na koju želiš preusmeriti korisnika
-    # end
+  respond_to :json
+
+  def show
+    self.resource = resource_class.confirm_by_token(params[:confirmation_token])
+    yield resource if block_given?
+
+    if resource.errors.empty?
+      render json: { success: true, message: "Your account was successfully confirmed." }
+    else
+      render json: { success: false, errors: resource.errors.full_messages }, status: :unprocessable_entity
+    end
   end
-  
+end
